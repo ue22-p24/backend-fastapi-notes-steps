@@ -1,10 +1,11 @@
-VERSION = "02c"
+VERSION = "03a"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
 
 from fastapi import FastAPI
 from fastapi import Depends
+from fastapi.staticfiles import StaticFiles
 
 from sqlmodel import SQLModel, create_engine
 from sqlmodel import Session
@@ -77,3 +78,8 @@ http :8000/api/notes/1
 def get_note(note_id: int, session: SessionDep) -> Note | None:
     note = session.get(Note, note_id)
     return note
+
+"""
+http :8000/static/css/style.css
+"""
+app.mount("/static", StaticFiles(directory="static"), name="static")
