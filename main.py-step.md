@@ -1,10 +1,15 @@
-## defining SessionDep for interacting with the DB
+## a table to store notes, and an API endpoint to create them
 
-this is boilerplate code to expose a session object, which we'll need to
-actually talk to the database
+this is typical code to create a table in a database; note the `table=True` passed to the `Note` class  
+this is what defines the actual set of columns in the database table
 
-it's interesting to note: this pattern is called "dependency injection"; the
-`SessionDep` object allows to reference a session object even though we **do not
-explicitly create it**; by defining `get_session`, we just explain **how to
-create it**, the framework will ensure its creation will happen before the first
-use
+as far as the API is concerned, we define a `POST` endpoint to create a note  
+in particular, note how minimal the code is; we  don't need to make any check on
+the incoming data, it will automatically be checked for consistency; and the
+framework does that based on the `note: Note` argument type  
+generally speaking, FastAPI will automatically check the types of the arguments,
+based on such *type hints*, and will return a 422 error if the types do not
+match  
+similarly, having typed the return value of the function as `Note`, FastAPI will
+automatically convert the returned object to JSON, and set the appropriate HTTP
+status code (201)

@@ -1,1 +1,1 @@
-# a DB session
+# POST /api/notes to create notes

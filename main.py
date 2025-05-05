@@ -1,4 +1,4 @@
-VERSION = "01b"
+VERSION = "02a"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -8,6 +8,7 @@ from fastapi import Depends
 
 from sqlmodel import SQLModel, create_engine
 from sqlmodel import Session
+from sqlmodel import Field
 
 SQLITE_URL = f"sqlite:///notes.db"
 engine = create_engine(SQLITE_URL)
@@ -32,6 +33,13 @@ def get_session():
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
+class Note(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    title: str
+    description: str
+    done: bool = False
+
+
 # Create the FastAPI app with the lifespan context manager
 app = FastAPI(lifespan=lifespan)
 
@@ -40,3 +48,15 @@ app = FastAPI(lifespan=lifespan)
 async def root():
     return dict(message="Hello FastAPI World!",
                 version=VERSION)
+
+"""
+http :8000/api/notes title="Devoirs" description="TP Backend"
+http :8000/api/notes title="Papiers" description="Nouveau Passeport"
+http :8000/api/notes title="Dentiste" description="ouille !" done:=true
+"""
+@app.post("/api/notes")
+def create_note(note: Note, session: SessionDep) -> Note:
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return note
