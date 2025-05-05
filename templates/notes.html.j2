@@ -10,6 +10,15 @@
 
 <body>
     <h1>My todo notes v{{version}}</h1>
+    <form id="add-note-form" action="/api/notes" method="POST">
+        <fieldset>
+            <legend>Add a new note</legend>
+            <input type="text" name="title" placeholder="Title" required>
+            <input type="text" name="description" placeholder="Description" required>
+            <button type="submit">Add Note</button>
+        </fieldset>
+    </form>
+
     <ul class="notes">
         {% for note in notes %}
         <li class="note">
@@ -24,6 +33,7 @@
     </ul>
 
     <script src="{{ url_for('static', path='/js/update-backend.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/forms-use-json.js') }}"></script>
 </body>
 
 </html>

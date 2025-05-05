@@ -1,4 +1,4 @@
-VERSION = "06"
+VERSION = "07"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
