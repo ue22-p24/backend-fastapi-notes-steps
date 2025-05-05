@@ -1,9 +1,13 @@
-VERSION = "01a"
+VERSION = "01b"
 
 from contextlib import asynccontextmanager
+from typing import Annotated
 
 from fastapi import FastAPI
+from fastapi import Depends
+
 from sqlmodel import SQLModel, create_engine
+from sqlmodel import Session
 
 SQLITE_URL = f"sqlite:///notes.db"
 engine = create_engine(SQLITE_URL)
@@ -18,6 +22,14 @@ async def lifespan(app: FastAPI):
     yield
     # shutdown logic comes here
     # none so far
+
+
+# create a so-called "dependency" to get the database session
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+SessionDep = Annotated[Session, Depends(get_session)]
 
 
 # Create the FastAPI app with the lifespan context manager
