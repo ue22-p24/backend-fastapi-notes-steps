@@ -16,11 +16,14 @@
             <div class="title">{{ note.title }}</div>
             <div class="line">
                 <span>{{ note.description }}</span>
-                <input type="checkbox" {% if note.done %}checked{%endif%} />
+                <input type="checkbox" {% if note.done %}checked{%endif%}
+                    onchange="note_done_changed(this, {{ note.id }})" />
             </div>
         </li>
         {% endfor %}
     </ul>
+
+    <script src="{{ url_for('static', path='/js/update-backend.js') }}"></script>
 </body>
 
 </html>

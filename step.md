@@ -1,1 +1,1 @@
-# PATCH /api/notes endpoint to change a note
+# clicking done is published to the backend
