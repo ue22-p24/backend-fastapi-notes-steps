@@ -1,4 +1,4 @@
-VERSION = "07"
+VERSION = "08"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -132,4 +132,18 @@ def update_note(
     session.commit()
     session.refresh(db_note)
     # return the updated note
+    return db_note
+
+
+"""
+http DELETE :8000/api/notes/3
+"""
+@app.delete("/api/notes/{note_id}")
+def delete_note(note_id: int, session: SessionDep):
+    db_note = session.get(Note, note_id)
+    if not db_note:
+        raise HTTPException(status_code=404, detail=f"Note {note_id} not found")
+    # delete the note
+    session.delete(db_note)
+    session.commit()
     return db_note

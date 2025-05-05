@@ -1,1 +1,1 @@
-# the UI can create a note
+# DELETE /api/notes/id
