@@ -16,8 +16,16 @@ function createNoteElement(note) {
     document.querySelector("ul.notes").appendChild(elt);
 }
 
-function updateNote(note) {
-    console.log("Updating note:", note);
+function updateNoteElement(note) {
+    const id = note.id;
+    const elt = document.querySelector(`#note-${id}`);
+    if (!elt) {
+        console.warn("Note element not found for ID:", id);
+        return;
+    }
+    elt.querySelector(".title").textContent = note.title;
+    elt.querySelector("span").textContent = note.description;
+    elt.querySelector("input[type='checkbox']").checked = note.done ? "checked" : "";
 }
 
 function deleteNote(noteId) {
