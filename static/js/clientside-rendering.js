@@ -28,6 +28,11 @@ function updateNoteElement(note) {
     elt.querySelector("input[type='checkbox']").checked = note.done ? "checked" : "";
 }
 
-function deleteNote(noteId) {
-    console.log("Deleting note with ID:", noteId);
+function deleteNoteElement(noteId) {
+    const elt = document.querySelector(`#note-${noteId}`);
+    if (elt) {
+        elt.remove();
+    } else {
+        console.warn("Note element not found for ID:", noteId);
+    }
 }
