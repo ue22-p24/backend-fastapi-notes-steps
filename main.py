@@ -1,4 +1,4 @@
-VERSION = "10a"
+VERSION = "10b"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -67,14 +67,15 @@ async def root():
 """
 http :8000/api/notes title="Devoirs" description="TP Backend"
 http :8000/api/notes title="Papiers" description="Nouveau Passeport"
-http :8000/api/notes title="Dentiste" description="ouille !" done:=true
+http :8000/api/notes title="Dentiste" description="ouille !"
 """
 @app.post("/api/notes")
-def create_note(note: Note, session: SessionDep) -> Note:
-    session.add(note)
+def create_note(note: NoteCreate, session: SessionDep) -> Note:
+    db_note = Note.model_validate(note)
+    session.add(db_note)
     session.commit()
-    session.refresh(note)
-    return note
+    session.refresh(db_note)
+    return db_note
 
 """
 http :8000/api/notes
@@ -125,7 +126,7 @@ http PATCH :8000/api/notes/1 description="TP Backend FastAPI"
 def update_note(
     note_id: int,
     session: SessionDep,
-    payload: Annotated[Note, Body(...)],
+    payload: Annotated[NoteUpdate, Body(...)],
 ):
     db_note = session.get(Note, note_id)
     if not db_note:
