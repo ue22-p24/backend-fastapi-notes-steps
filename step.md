@@ -1,1 +1,1 @@
-# use the new types
+# the WebsocketBroadcaster class
