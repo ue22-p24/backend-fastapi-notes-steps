@@ -1,4 +1,4 @@
-VERSION = "04"
+VERSION = "05"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -12,6 +12,7 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi import Body
 
 from sqlmodel import SQLModel, create_engine
 from sqlmodel import Session
@@ -41,6 +42,8 @@ def get_session():
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
+# for now we'll use a single type for all operations on notes
+# BUT we'll see later on how to improve that
 class Note(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     title: str
@@ -107,3 +110,26 @@ def notes_page(request: Request, session: SessionDep):
         request=request,
         name="notes.html.j2",
         context={"version": VERSION, "notes": notes})
+
+
+"""
+http PATCH :8000/api/notes/1 done:=true
+http PATCH :8000/api/notes/1 description="TP Backend FastAPI"
+"""
+@app.patch("/api/notes/{note_id}", response_model=Note)
+def update_note(
+    note_id: int,
+    session: SessionDep,
+    payload: Annotated[Note, Body(...)],
+):
+    db_note = session.get(Note, note_id)
+    if not db_note:
+        raise HTTPException(status_code=404, detail=f"Note {note_id} not found")
+    # a class-independant way to do the update
+    db_note.sqlmodel_update(payload.model_dump(exclude_unset=True))
+    # commit the changes to the database
+    session.add(db_note)
+    session.commit()
+    session.refresh(db_note)
+    # return the updated note
+    return db_note
