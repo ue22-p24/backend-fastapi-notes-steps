@@ -1,1 +1,1 @@
-# the UI can delete a note
+# fine-grained types NoteCreate NoteUpdate Note
