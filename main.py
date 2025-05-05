@@ -1,4 +1,4 @@
-VERSION = "02b"
+VERSION = "02c"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -69,3 +69,11 @@ http :8000/api/notes
 def get_notes(session: SessionDep) -> list[Note]:
     notes = session.exec(select(Note)).all()
     return notes
+
+"""
+http :8000/api/notes/1
+"""
+@app.get("/api/notes/{note_id}")
+def get_note(note_id: int, session: SessionDep) -> Note | None:
+    note = session.get(Note, note_id)
+    return note
