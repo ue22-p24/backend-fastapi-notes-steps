@@ -1,1 +1,1 @@
-# define id=note-{id} to the note <li>
+# CSR on note creation
