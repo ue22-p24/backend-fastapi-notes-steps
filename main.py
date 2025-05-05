@@ -1,11 +1,16 @@
-VERSION = "03a"
+VERSION = "03b"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
 
+import requests
+
 from fastapi import FastAPI
 from fastapi import Depends
 from fastapi.staticfiles import StaticFiles
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 from sqlmodel import SQLModel, create_engine
 from sqlmodel import Session
@@ -83,3 +88,23 @@ def get_note(note_id: int, session: SessionDep) -> Note | None:
 http :8000/static/css/style.css
 """
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+templates = Jinja2Templates(directory="templates")
+
+"""
+http :8000/front/notes
+"""
+@app.get("/front/notes", response_class=HTMLResponse)
+def notes_page(request: Request, session: SessionDep):
+    # get the notes through the API, not directly from the database
+    base_url = request.url.scheme + "://" + request.url.netloc
+    url = base_url + "/api/notes"
+    response = requests.get(url)
+    if not (200 <= response.status_code < 300):
+        raise Exception(f"Error {response.status_code} while getting notes")
+    notes = response.json()
+    return templates.TemplateResponse(
+        request=request,
+        name="notes.html.j2",
+        context={"notes": notes})
