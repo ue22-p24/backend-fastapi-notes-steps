@@ -1,4 +1,4 @@
-VERSION = "11c"
+VERSION = "12"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -77,11 +77,12 @@ http :8000/api/notes title="Papiers" description="Nouveau Passeport"
 http :8000/api/notes title="Dentiste" description="ouille !"
 """
 @app.post("/api/notes")
-def create_note(note: NoteCreate, session: SessionDep) -> Note:
+async def create_note(note: NoteCreate, session: SessionDep) -> Note:
     db_note = Note.model_validate(note)
     session.add(db_note)
     session.commit()
     session.refresh(db_note)
+    await websocket_broadcaster.broadcast(action="create", note=db_note)
     return db_note
 
 """
@@ -130,7 +131,7 @@ http PATCH :8000/api/notes/1 done:=true
 http PATCH :8000/api/notes/1 description="TP Backend FastAPI"
 """
 @app.patch("/api/notes/{note_id}", response_model=Note)
-def update_note(
+async def update_note(
     note_id: int,
     session: SessionDep,
     payload: Annotated[NoteUpdate, Body(...)],
@@ -144,6 +145,7 @@ def update_note(
     session.add(db_note)
     session.commit()
     session.refresh(db_note)
+    await websocket_broadcaster.broadcast(action="update", note=db_note)
     # return the updated note
     return db_note
 
@@ -152,13 +154,14 @@ def update_note(
 http DELETE :8000/api/notes/3
 """
 @app.delete("/api/notes/{note_id}")
-def delete_note(note_id: int, session: SessionDep):
+async def delete_note(note_id: int, session: SessionDep):
     db_note = session.get(Note, note_id)
     if not db_note:
         raise HTTPException(status_code=404, detail=f"Note {note_id} not found")
     # delete the note
     session.delete(db_note)
     session.commit()
+    await websocket_broadcaster.broadcast(action="delete", note=db_note)
     return db_note
 
 
