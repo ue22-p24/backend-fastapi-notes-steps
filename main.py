@@ -1,4 +1,4 @@
-VERSION = "02a"
+VERSION = "02b"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -9,6 +9,7 @@ from fastapi import Depends
 from sqlmodel import SQLModel, create_engine
 from sqlmodel import Session
 from sqlmodel import Field
+from sqlmodel import select
 
 SQLITE_URL = f"sqlite:///notes.db"
 engine = create_engine(SQLITE_URL)
@@ -60,3 +61,11 @@ def create_note(note: Note, session: SessionDep) -> Note:
     session.commit()
     session.refresh(note)
     return note
+
+"""
+http :8000/api/notes
+"""
+@app.get("/api/notes")
+def get_notes(session: SessionDep) -> list[Note]:
+    notes = session.exec(select(Note)).all()
+    return notes
