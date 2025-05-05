@@ -1,25 +1,12 @@
-## serve a HTML page from a Jinja template
+## a simple redirect
 
-this new `/front/notes/` endpoint will return a HTML page, which is rendered from a Jinja template
+generally, people will just type a URL with the domain name in their browser; i.e.  
+`https://awesomenotes.io/`  
+and not  
+`https://awesomenotes.io/front/notes`  
 
-### templating
+so it's good practice that the `/` URL redirects to the `/front/notes` URL, which is what we do here
 
-worth being noted here, is the way the data is passed from Python to the template, by setting the `context` parameter of the `render_template` function
-
-### fetching data
-
-another important point is this:  
-for fetching the list of notes, we could have gotten it from the database directly, using this code
-
-```python
-def notes_page(request: Request, session: SessionDep):
-    notes = session.exec(select(Note)).all()
-    return templates.TemplateResponse(
-        request=request,
-        name="notes.html.j2",
-        context={"notes": notes})
-```
-
-and that would have worked well  
-however we choose to use the `/api/notes` endpoint instead, which is a bit more complex,
-but allows for better flexibility in the long run, especially because the first step for scaling up will be to separate, on the one hand, the service that serves the frontend, and on the other hand the API service itself (and the DB service as well, for that matter)
+and in order to still get a way to see the current version of the API, we pass
+another variable to the template context; this is used in the `.j2` template
+(not shown here) to display the current version of the API

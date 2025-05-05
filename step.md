@@ -1,1 +1,1 @@
-# GET /front/notes returns templated HTML
+# redirect / to /front/notes
