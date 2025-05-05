@@ -1,4 +1,4 @@
-VERSION = "11a"
+VERSION = "11b"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -13,6 +13,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Body
+from fastapi import WebSocket, WebSocketDisconnect
 
 from sqlmodel import SQLModel, create_engine
 from sqlmodel import Session
@@ -159,3 +160,14 @@ def delete_note(note_id: int, session: SessionDep):
     session.delete(db_note)
     session.commit()
     return db_note
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket_broadcaster.connect(websocket)
+    try:
+        while True:
+            # Optional: handle incoming messages if you want, or just keep alive
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        websocket_broadcaster.disconnect(websocket)

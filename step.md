@@ -1,1 +1,1 @@
-# the WebsocketBroadcaster class
+# /ws endpoint
