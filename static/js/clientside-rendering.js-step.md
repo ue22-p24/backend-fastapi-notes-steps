@@ -1,7 +1,7 @@
-## CSR for note updates
+## CSR deletion
 
-this now is about client-side rendering of note updates; this is a tad more
-tricky than pure creation, in particular we're using the fact that notes
-&lt;li&gt; elements have their `id` based on the note DB id, so we can easily
-find the corresponding DOM element to update
+and finally we code the way the browser must react upon note deletion; it is an easy task
 
+at this point we have a fully functional app, with which we can safely create,
+update and delete notes in a consistent way across all clients, and ensure we
+always get an accurate view of the state of all notes

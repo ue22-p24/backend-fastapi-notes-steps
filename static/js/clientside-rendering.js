@@ -29,5 +29,10 @@ function updateNoteElement(note) {
 }
 
 function deleteNoteElement(noteId) {
-    console.log("Deleting note with ID:", noteId);
+    const elt = document.querySelector(`#note-${noteId}`);
+    if (elt) {
+        elt.remove();
+    } else {
+        console.warn("Note element not found for ID:", noteId);
+    }
 }
