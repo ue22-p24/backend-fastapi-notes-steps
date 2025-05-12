@@ -1,1 +1,1 @@
-# /ws endpoint
+# inject ws-listener.js in template
