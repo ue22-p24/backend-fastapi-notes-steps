@@ -1,1 +1,1 @@
-# GET /api/notes endpoint
+# GET /api/notes/id endpoint
