@@ -1,4 +1,4 @@
-VERSION = "09"
+VERSION = "10a"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -42,13 +42,18 @@ def get_session():
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
-# for now we'll use a single type for all operations on notes
-# BUT we'll see later on how to improve that
-class Note(SQLModel, table=True):
+# in this version we define several models for a note
+# that describe which fields exactly we want to support / expose
+# in each operation of the API
+class NoteCreate(SQLModel):
+    title: str | None = Field(default=None, description="le titre de la note")
+    description: str | None = Field(default=None, description="Le texte de la note")
+
+class NoteUpdate(NoteCreate):
+    done: bool = Field(default=False, description="La tâche est-elle terminée ?")
+
+class Note(NoteUpdate, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    title: str
-    description: str
-    done: bool = False
 
 
 # Create the FastAPI app with the lifespan context manager
