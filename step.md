@@ -1,1 +1,1 @@
-# expose static files
+# GET /front/notes returns templated HTML

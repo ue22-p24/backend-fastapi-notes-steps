@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>My todo notes</title>
+</head>
+
+<body>
+    <h1>My todo notes</h1>
+    <ul class="notes">
+        {% for note in notes %}
+        <li class="note">
+            <div class="title">{{ note.title }}</div>
+            <div class="line">
+                <span>{{ note.description }}</span>
+                <input type="checkbox" {% if note.done %}checked{%endif%} />
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
