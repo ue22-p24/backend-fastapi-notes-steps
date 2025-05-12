@@ -1,1 +1,1 @@
-# handle incoming WS messages in the frontend
+# define id=note-{id} to the note <li>

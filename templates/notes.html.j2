@@ -21,7 +21,7 @@
 
     <ul class="notes">
         {% for note in notes %}
-        <li class="note">
+        <li id="note-{{note.id}}" class="note">
             <div class="title">{{ note.title }}
                 <button class="delete-button" onclick="note_delete(this, {{ note.id }})">🗑</button>
             </div>
