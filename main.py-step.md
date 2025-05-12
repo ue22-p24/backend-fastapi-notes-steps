@@ -1,10 +1,10 @@
-## create a database with sqlmodel using a lifespan
+## defining SessionDep for interacting with the DB
 
-we import the `sqlmodel` module; and in order to create the database, we define the `lifespan` function.
+this is boilerplate code to expose a session object, which we'll need to
+actually talk to the database
 
-FastAPI expects this function to be a generator function; this allows to define the application prolog and epilog
-(the prolog is executed before the first `yield` statement, and the epilog is executed after that point)
-
-Note how the `app` variable is created by passing the `lifespan` function to the `FastAPI` constructor.
-
-With this version, the database is created and populated when the application starts (although at this point the database is empty)
+it's interesting to note: this pattern is called "dependency injection"; the
+`SessionDep` object allows to reference a session object even though we **do not
+explicitly create it**; by defining `get_session`, we just explain **how to
+create it**, the framework will ensure its creation will happen before the first
+use
