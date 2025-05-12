@@ -1,12 +1,20 @@
-## a simple redirect
+## allow callers to modify a note
 
-generally, people will just type a URL with the domain name in their browser; i.e.  
-`https://awesomenotes.io/`  
-and not  
-`https://awesomenotes.io/front/notes`  
+It's cool to be able to create a note, but we also want to be able to modify it
 
-so it's good practice that the `/` URL redirects to the `/front/notes` URL, which is what we do here
+it is the purpose of this new `PATCH` endpoint
 
-and in order to still get a way to see the current version of the API, we pass
-another variable to the template context; this is used in the `.j2` template
-(not shown here) to display the current version of the API
+Please note in this code:
+
+- the use of the `Body` annotation; this means that the `payload` argument is
+  expected to be in the body of the request, and not in the URL or headers
+- again we use the `Note` class to define the type of the payload; this means that
+  FastAPI will automatically check that the incoming data is consistent with the
+  `Note` class, and will return a 422 error if it is not
+- also interesting, this line  
+  `db_note.sqlmodel_update(payload.model_dump(exclude_unset=True))`  
+  which allow us to safely update the note with the new values;  
+  compare this with a tedious code were we would consider each field one by one,
+  checking of that field is provided or not by the caller, and update the object
+  accordingly  
+  clearly this one-liner is much more readable and maintainable !
