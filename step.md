@@ -1,1 +1,1 @@
-# inject ws-listener.js in template
+# the api endpoints broadcast the changes on WS
