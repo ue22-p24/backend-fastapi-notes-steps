@@ -1,5 +1,5 @@
-## using the new types
+## create a broadcaster instance
 
-we can now take advantage of these different types to annotate the various methods, and FastAPI will automatically adjust the allowed fields in each request body accordingly
+our application needs to maintain a list of connected clients, so the main program creates one instance of the `WebSocketBroadcaster` class - this is known as a singleton pattern.
 
-in particular with the choice made above, it is no longer possible to pass a value for `done` at creation time - and this is by design
+next we'll see how to take advantage of this instance for reacting on incoming websocket connections

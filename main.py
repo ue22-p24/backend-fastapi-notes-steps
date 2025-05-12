@@ -1,4 +1,4 @@
-VERSION = "10b"
+VERSION = "11a"
 
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -18,6 +18,12 @@ from sqlmodel import SQLModel, create_engine
 from sqlmodel import Session
 from sqlmodel import Field
 from sqlmodel import select
+
+from broadcaster import WebSocketBroadcaster
+
+# create a singleton object
+websocket_broadcaster = WebSocketBroadcaster()
+
 
 SQLITE_URL = f"sqlite:///notes.db"
 engine = create_engine(SQLITE_URL)
