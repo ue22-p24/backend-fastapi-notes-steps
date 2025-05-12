@@ -1,1 +1,1 @@
-# the api endpoints broadcast the changes on WS
+# handle incoming WS messages in the frontend
