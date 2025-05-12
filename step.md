@@ -1,1 +1,1 @@
-# POST /api/notes to create notes
+# GET /api/notes endpoint
