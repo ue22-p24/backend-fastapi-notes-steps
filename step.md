@@ -1,1 +1,1 @@
-# GET /api/notes/id endpoint
+# expose static files
