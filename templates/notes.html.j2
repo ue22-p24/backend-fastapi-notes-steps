@@ -22,7 +22,9 @@
     <ul class="notes">
         {% for note in notes %}
         <li class="note">
-            <div class="title">{{ note.title }}</div>
+            <div class="title">{{ note.title }}
+                <button class="delete-button" onclick="note_delete(this, {{ note.id }})">🗑</button>
+            </div>
             <div class="line">
                 <span>{{ note.description }}</span>
                 <input type="checkbox" {% if note.done %}checked{%endif%}

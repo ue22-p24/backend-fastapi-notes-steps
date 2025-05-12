@@ -18,3 +18,20 @@ async function note_done_changed(elt, nodeId) {
       console.error("Error updating note done status:", response.statusText)
     }
   }
+
+
+async function note_delete(elt, nodeId) {
+  const url = `/api/notes/${nodeId}`;
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.ok) {
+    const data = await response.json();
+    console.log(`${url} returned`, data);
+  } else {
+    console.error("Error deleting note:", response.statusText);
+  }
+}

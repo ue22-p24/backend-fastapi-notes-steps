@@ -1,1 +1,1 @@
-# DELETE /api/notes/id
+# the UI can delete a note
