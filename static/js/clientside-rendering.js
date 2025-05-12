@@ -17,7 +17,15 @@ function createNoteElement(note) {
 }
 
 function updateNoteElement(note) {
-    console.log("Updating note:", note);
+    const id = note.id;
+    const elt = document.querySelector(`#note-${id}`);
+    if (!elt) {
+        console.warn("Note element not found for ID:", id);
+        return;
+    }
+    elt.querySelector(".title").textContent = note.title;
+    elt.querySelector("span").textContent = note.description;
+    elt.querySelector("input[type='checkbox']").checked = note.done ? "checked" : "";
 }
 
 function deleteNoteElement(noteId) {
